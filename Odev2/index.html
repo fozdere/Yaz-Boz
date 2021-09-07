@@ -1,0 +1,310 @@
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="stil.css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+  <hr>
+  <h1 style="text-align: center">Yaz Boz</h1>
+    <hr>
+    <div class="Sayfa1">
+    <div id="kisiler" class="row">
+        <div class="col">
+          <input id="Kisi1" type="text" class="form-control" placeholder="1. Kişi" aria-label="1. Kişi">
+          <input id="chbx1" class="form-check-input mt-0" type="checkbox" aria-label="Checkbox for following text input">
+        </div>
+        <div class="col">
+          <input id="Kisi2" type="text" class="form-control" placeholder="2. Kişi" aria-label="2. Kişi">
+          <input id="chbx2" class="form-check-input mt-0" type="checkbox" aria-label="Checkbox for following text input">
+        </div>
+            <div class="col">
+              <input id="Kisi3" type="text" class="form-control" placeholder="3. Kişi" aria-label="3. Kişi">
+              <input id="chbx3" class="form-check-input mt-0" type="checkbox" aria-label="Checkbox for following text input">
+            </div>
+            <div class="col">
+              <input id="Kisi4" type="text" class="form-control" placeholder="4. Kişi" aria-label="4. Kişi">
+              <input id="chbx4" class="form-check-input mt-0" type="checkbox" aria-label="Checkbox for following text input">
+            </div>
+      </div>
+      <hr>
+      <div class="w-25">
+          <select class="form-select mb-5" id="selectListe" name="Seçiniz" >
+              <option selected>Seçiniz</option>
+              <option value="2">2</option>
+              <option value="7">7</option>
+              <option value="9">9</option>
+              <option value="11">11</option>
+              <option value="13">13</option>
+          </select>
+      </div>
+      <div class="kayd">
+        <button type="submit" onClick="kaydBtn()" class="btn btn-primary">Kaydet</button>
+      </div>
+      </div>
+      <div class="Sayfa2" style="display: none" >
+          <table class="table">
+            <thead class="table-dark">
+              <tr>
+                <th>#</th>
+                <th style="text-align: center" id="oyuncu1"></th>
+                <th style="text-align: center" id="oyuncu2"></th>
+                <th style="text-align: center" id="oyuncu3"></th>
+                <th style="text-align: center" id="oyuncu4"></th>
+                <th style="text-align: center" id="checked">Tur Geç</th>
+              </tr>
+            </thead>
+            <tbody id="tableTbody">
+
+            </tbody>
+            <tfoot>
+              <tr>
+                <td style="text-align: center" id="footerPuan">Toplam Puan</td>
+                <td style="text-align: center" id="footerKullanici1">0</td>
+                <td style="text-align: center" id="footerKullanici2">0</td>
+                <td style="text-align: center" id="footerKullanici3">0</td>
+                <td style="text-align: center" id="footerKullanici4">0</td>
+                <td style="text-align: center" id="footerToplamPuan">Toplam Puan</td>
+              </tr>
+            </tfoot>
+          </table>
+          <div id="görünüm" style="display: none">
+            <div id="kazananDiv" class="alert alert-success d-flex align-items-center" role="alert">
+            <div>
+              <p id="kazanan" style="padding-left: 420px"></p>
+            </div>
+          </div>
+          <div id="kaybedenDiv" class="alert alert-danger d-flex align-items-center" role="alert">
+          <div>
+            <p id="kaybeden" style="padding-left: 420px"></p>
+          </div>
+        </div>
+      </div>
+    
+      </div>
+      <script>
+        var no, KisiBir, Kisiİki, KisiUc, KisiDort, Listeleme, kullanicisec, moreChecked = 0, puanKisiBir = 0, puanKisiİki = 0, puanKisiUc = 0, puanKisiDort = 0;
+        var KisiBirPuanSayı = new Array();
+        var KisiİkiPuanSayı = new Array();
+        var KisiUcPuanSayı = new Array();
+        var KisiDortPuanSayı = new Array();
+        var puanlama = new Array();
+        function kaydBtn(){
+          KisiBir = $('#Kisi1').val();
+          Kisiİki = $('#Kisi2').val();
+          KisiUc = $('#Kisi3').val();
+          KisiDort = $('#Kisi4').val();
+          Listeleme = $('#selectListe').val();
+          kullaniciSec();
+          if(moreChecked !=1){
+            swal("Hata", "kullanıcı seç", "uyarı");
+          }
+          else{
+            swal("başladı", "başlat", "başarılı");
+            deleteSayfa1();
+          }
+           
+         
+          
+        }
+        function kullaniciSec(){
+          if(document.getElementById("chbx1").checked){
+            kullanicisec = KisiBir;
+            moreChecked++;
+          }
+          if(document.getElementById("chbx2").checked){
+            kullanicisec = Kisiİki;
+            moreChecked++;
+          }
+          if(document.getElementById("chbx3").checked){
+            kullanicisec = KisiUc;
+            moreChecked++;
+          }
+          if(document.getElementById("chbx4").checked){
+            kullanicisec = KisiDort;
+            moreChecked++;
+          }
+        }
+        function deleteSayfa1(){
+          $(".Sayfa1").remove();
+          $(".Sayfa2").show();
+          kullaniciekle1();
+          secilenKullanici(kullanicisec);
+        }
+        function secilenKullanici(kullanicisecme){
+          switch (kullanicisecme) {
+            case KisiBir:
+              for(let i = 0; i < Listeleme; i++){
+                if(i % 4 == 0){ $("#KisiBirTableInput-" + (i + 1)).css("border-color", "red");}
+                if(i % 4 == 1){ $("#KisiİkiTableInput-" + (i + 1)).css("bordor-color", "red");}
+                if(i % 4 == 2){ $("#KisiUcTableInput-" + (i + 1)).css("bordor-color", "red");}
+                if(i % 4 == 3){ $("#KisiDortTableInput-" + (i + 1)).css("bordor-color", "red");}
+              }
+              break;
+              case Kisiİki:
+              for(let i = 0; i < Listeleme; i++){
+                if(i % 4 == 0){ $("#KisiİkiTableInput-" + (i + 1)).css("border-color", "red");}
+                if(i % 4 == 1){ $("#KisiUcTableInput-" + (i + 1)).css("bordor-color", "red");}
+                if(i % 4 == 2){ $("#KisiDortTableInput-" + (i + 1)).css("bordor-color", "red");}
+                if(i % 4 == 3){ $("#KisiBirTableInput-" + (i + 1)).css("bordor-color", "red");}
+              }
+              break;
+              case KisiUc:
+              for(let i = 0; i < Listeleme; i++){
+                if(i % 4 == 0){ $("#KisiUcTableInput-" + (i + 1)).css("border-color", "red");}
+                if(i % 4 == 1){ $("#KisiDortTableInput-" + (i + 1)).css("bordor-color", "red");}
+                if(i % 4 == 2){ $("#KisiBirTableInput-" + (i + 1)).css("bordor-color", "red");}
+                if(i % 4 == 3){ $("#KisiİkiTableInput-" + (i + 1)).css("bordor-color", "red");}
+              }
+              break;
+              case KisiDort:
+              for(let i = 0; i < Listeleme; i++){
+                if(i % 4 == 0){ $("#KisiDortTableInput-" + (i + 1)).css("border-color", "red");}
+                if(i % 4 == 1){ $("#KisiBirTableInput-" + (i + 1)).css("bordor-color", "red");}
+                if(i % 4 == 2){ $("#KisiİkiTableInput-" + (i + 1)).css("bordor-color", "red");}
+                if(i % 4 == 3){ $("#KisiUcTableInput-" + (i + 1)).css("bordor-color", "red");}
+              }
+              break;
+          }
+        }
+        function kullaniciekle1(){
+          $("#oyuncu1").append(KisiBir);
+            $("#oyuncu2").append(Kisiİki);
+            $("#oyuncu3").append(KisiUc);
+            $("#oyuncu4").append(KisiDort);
+
+            for (let i = 0; i < Listeleme; i++) {
+                $("#tableTbody").append(
+                    '<tr id = "trID-' + (i + 1) + '"><td id = "gecID-' + (i + 1) + '">' + (i + 1) + '</td>' +
+                    '<td id = "KisiBirID-' + (i + 1) + '">' + ' <input id = "KisiBirTableInput-' + (i + 1) + '" type="number" class="form-control" aria-describedby="inputGroup-sizing-default"> </td>' +
+                    '<td id = "KisiikiID-' + (i + 1) + '">' + ' <input id = "KisiİkiTableInput-' + (i + 1) + '" type="number" class="form-control" aria-describedby="inputGroup-sizing-default"> </td>' +
+                    '<td id = "KisiUcID-' + (i + 1) + '">' + ' <input id = "KisiUcTableInput-' + (i + 1) + '" type="number" class="form-control" aria-describedby="inputGroup-sizing-default"> </td> ' +
+                    '<td id = "KisiDortID-' + (i + 1) + '">' + ' <input id = "KisiDortTableInput-' + (i + 1) + '" type="number" class="form-control" aria-describedby="inputGroup-sizing-default"> </td>' +
+                    '<td id = "TurGecID-' + (i + 1) + '">' + '<div class="form-check"><input  id="TurGecInputID-' + (i + 1) + '" ' + ' class="form-check-input" type="checkbox" name="defaultCheck1"><label class="form-check-label" for="TurGecInputID-' + (i + 1) + '" ' + ' " >Turu Geç</label></div> </td></tr>');
+
+                    $("input").prop("disabled", true);
+                    $("#TurGecInputID-1").prop("disabled", false);
+                    $("#KisiBirTableInput-1").prop("disabled", false);
+                    $("#KisiİkiTableInput-1").prop("disabled", false);
+                    $("#KisiUcTableInput-1").prop("disabled", false);
+                    $("#KisiDortTableInput-1").prop("disabled", false);
+
+                    $(("#TurGecInputID-" + (i + 1))).change(function(){
+                      var $input = $(this);
+                      if($input.prop("checked") == true){
+                      let bir, iki, üc, dort;
+                      (isNaN(parseInt($("#KisiBirTableInput-" + (i + 1)).val()))) ? bir = (parseInt(0)) : bir = parseInt($("#KisiBirTableInput-" + (i + 1)).val());
+                      (isNaN(parseInt($("#KisiİkiTableInput-" + (i + 1)).val()))) ? iki = (parseInt(0)) : iki = parseInt($("#KisiİkiTableInput-" + (i + 1)).val());
+                      (isNaN(parseInt($("#KisiUcTableInput-" + (i + 1)).val()))) ? üc = (parseInt(0)) : üc = parseInt($("#KisiUcTableInput-" + (i + 1)).val());
+                      (isNaN(parseInt($("#KisiDortTableInput-" + (i + 1)).val()))) ? dort = (parseInt(0)) : dort = parseInt($("#KisiDortTableInput-" + (i + 1)).val());
+
+                      arrayAdder(bir, iki, üc, dort, (i + 1));
+                      $("input").prop("disabled", true);
+                      $("#TurGecInputID-" + (i + 2)).prop("disabled", false);
+                      $("#KisiBirTableInput-" + (i + 2)).prop("disabled", false);
+                      $("#KisiİkiTableInput-" + (i + 2)).prop("disabled", false);
+                      $("#KisiUcTableInput-" + (i + 2)).prop("disabled", false);
+                      $("#KisiDortTableInput-" + (i + 2)).prop("disabled", false);
+                    }
+               }).change();
+            }
+        }
+        function arrayAdder(KisiBirPuan, KisiİkiPuan, KisiUcPuan, KisiDortPuan, numara){
+          KisiBirPuanSayı.push(KisiBirPuan);
+          KisiİkiPuanSayı.push(KisiİkiPuan);
+          KisiUcPuanSayı.push(KisiUcPuan);
+          KisiDortPuanSayı.push(KisiDortPuan);
+          yazFooter(numara);
+          if(numara == Listeleme){
+            let puanKisiBir = 0, puanKisiİki = 0, puanKisiUc = 0, puanKisiDort = 0, kazananKisi, kaybedenKisi;
+            for(let i = 0; i < Listeleme; i++){
+              puanKisiBir += parseInt(KisiBirPuanSayı[i]);
+              puanKisiİki += parseInt(KisiİkiPuanSayı[i]);
+              puanKisiUc += parseInt(KisiUcPuanSayı[i]);
+              puanKisiDort += parseInt(KisiDortPuanSayı[i]);
+            }
+            let kaybedenNum = Math.max(puanKisiBir, puanKisiİki, puanKisiUc, puanKisiDort);
+            let kazananNum = Math.min(puanKisiBir, puanKisiİki, puanKisiUc, puanKisiDort);
+            switch(kaybedenNum){
+              case puanKisiBir:
+                kaybedenKisi = KisiBir;
+                break;
+                case puanKisiİki:
+                  kaybedenKisi = Kisiİki;
+                  break;
+                  case puanKisiUc:
+                    kaybedenKisi = KisiUc;
+                    break;
+                    case puanKisiDort:
+                      kaybedenKisi = KisiDort;
+                      break;
+            }
+            switch(kazananNum){
+              case puanKisiBir:
+                kazananKisi = KisiBir;
+                break;
+                case puanKisiİki:
+                  kazananKisi = Kisiİki;
+                  break;
+                  case puanKisiUc:
+                    kazananKisi = KisiUc;
+                    break;
+                    case puanKisiDort:
+                    kazananKisi = KisiDort;
+                    break;
+            }
+            yazSonuc(kazananNum, kazananKisi, kaybedenNum, kaybedenKisi);
+          }
+        }
+        function yazFooter(yaz){
+          puanKisiBir = 0;
+          puanKisiİki = 0;
+          puanKisiUc = 0;
+          puanKisiDort = 0;
+          for(let i = 0; i < yaz; i++){
+            puanKisiBir += parseInt(KisiBirPuanSayı[i]);
+            puanKisiİki += parseInt(KisiİkiPuanSayı[i]);
+            puanKisiUc += parseInt(KisiUcPuanSayı[i]);
+            puanKisiDort += parseInt(KisiDortPuanSayı[i]);
+          }
+          let renk = [puanKisiBir, puanKisiİki, puanKisiUc, puanKisiDort];
+          renk.sort((a, b) => a - b);
+          let renkSıra = ["green", "darkgreen", "orangered", "red"];
+          for(let i = 0; i < renk.length; i++){
+            if(puanKisiBir == renk[i]){
+                $("#footerKullanici1").text(puanKisiBir);
+                $("#footerKullanici1").css("background-color", renkSıra[i]);
+                $("#oyuncu1").css("background-color", renkSıra[i]);
+            }
+            if(puanKisiİki == renk[i]){
+               $("#footerKullanici2").text(puanKisiİki);
+               $("#footerKullanici2").css("background-color", renkSıra[i]);
+               $("#oyuncu2").css("background-color", renkSıra[i]);
+            }
+            if(puanKisiUc == renk[i]){
+              $("#footerKullanici3").text(puanKisiUc);
+              $("#footerKullanici3").css("background-color", renkSıra[i]);
+              $("#oyuncu3").css("background-color", renkSıra[i]);
+            }
+            if(puanKisiDort == renk[i]){
+              $("#footerKullanici4").text(puanKisiDort);
+              $("#footerKullanici4").css("background-color", renkSıra[i]);
+              $("#oyuncu4").css("background-color", renkSıra[i]);
+            }
+          }
+          
+        }
+        function yazSonuc(KazananPuan, KazananKisi, KaybedenPuan, KaybedenKisi){
+          $("#görünüm").show();
+          $("#kazanan").text("KAZANAN = " + KazananKisi + " || PUAN = " + KazananPuan);
+          $("#kaybeden").text("KAYBEDEN = " + KaybedenKisi + " || PUAN = " + KaybedenPuan);
+        }
+      </script>
+</body>
+</html>
